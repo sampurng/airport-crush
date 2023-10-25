@@ -2,7 +2,7 @@ use mongodb::{ bson::doc , Client, options::{ClientOptions, ServerApi, ServerApi
 use rocket::tokio;
 
 #[tokio::main]
-pub async fn connect_to_mongo()-> mongodb::error::Result<()> {
+pub async fn connect_to_mongo()-> mongodb::error::Result<Client> {
     // Replace the placeholder with your Atlas connection string
     let uri ="mongodb://localhost:27017";
     let mut client_options = ClientOptions::parse(uri)?;
@@ -14,8 +14,6 @@ pub async fn connect_to_mongo()-> mongodb::error::Result<()> {
     // Send a ping to confirm a successful connection
     client.database("admin").run_command(doc! { "ping": 1 }, None).await?;
     println!("Pinged your deployment. You successfully connected to MongoDB!");
-    Ok(())
+    Ok(client)
 }   
 
-
-//set up a connection manager next time.

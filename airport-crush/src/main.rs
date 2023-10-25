@@ -4,7 +4,7 @@ mod connection;
 
 #[get("/world")]
 fn index(){
-    let _dbs: Result<(), mongodb::error::Error> = connection::connect_to_mongo();
+    let _dbs = connection::connect_to_mongo();
     // match dbs {
     //     Ok(res) => print!("{}", match res.get(0){
     //         Some(str) => str, 
