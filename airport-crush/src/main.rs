@@ -1,24 +1,7 @@
 #[macro_use] 
 extern crate rocket;
 mod connection;
-
-#[get("/world")]
-fn index(){
-    let _dbs = connection::connect_to_mongo();
-    // match dbs {
-    //     Ok(res) => print!("{}", match res.get(0){
-    //         Some(str) => str, 
-    //         _ => ""n 
-    //     }),
-    //     Err(e) => print!("{}", e)
-    // }
-    ()
-}
-
-#[get("/databaseConnections")]
-fn connections() -> &'static str {
-    "hehe"
-}
+mod controllers;
 
 #[launch]
 fn rocket() -> _ {
@@ -26,5 +9,5 @@ fn rocket() -> _ {
     
     // let t: Result<(), mongodb::error::Error> = connect_to_mongo();
     rocket::build()
-        .mount("/", routes![index, connections])
+        .mount("/", routes![controllers::signup::index, controllers::signup::connections])
 }
