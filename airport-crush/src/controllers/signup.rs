@@ -1,3 +1,6 @@
+use core::fmt::Error;
+// use std::collections;
+
 #[get("/world")]
 pub fn index(){
     // let _dbs = connection::connect_to_mongo();
@@ -15,4 +18,13 @@ pub fn index(){
 pub fn connections() -> &'static str {
     "hehe"
 }
+
+#[post("/signup", format = "appication/json", data = "<user>")]
+pub fn signup(user: collections::user::User) -> Result<(), Error> {
+    println!("{}", user);
+    Ok(())
+}
+
+
+
 

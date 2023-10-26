@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 use mongodb::Client;
 
 #[derive(Debug, Serialize, Deserialize)]
-struct User{
+pub struct User{
     email: &str, 
     password: &str, 
     user_name: Option<&str>,
@@ -11,8 +11,7 @@ struct User{
     age : Option<u32>,
 }
 
-impl User{
-
+pub impl User{
     pub fn CreateUser(user: User, client : Client) -> Result<(), Error> {
         let user_collection = client.database("airport-crush").collection("Users");
         
