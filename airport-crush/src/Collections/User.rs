@@ -1,20 +1,32 @@
-use serde::{Serialize, Deserialize};
 use mongodb::Client;
+use serde::{Serialize, Deserialize};
+use std::fmt::Error;
+use mongodb::Collection; 
+use rocket::serde::Form;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User{
-    email: &str, 
-    password: &str, 
-    user_name: Option<&str>,
-    first_name: Option<&str>,
-    last_name: Option<&str>,
+    email: String, 
+    password: String, 
+    user_name: Option<String>,
+    first_name: Option<String>,
+    last_name: Option<String>,
     age : Option<u32>,
 }
 
-pub impl User{
+impl<'v> FromFormValue<'v> for User{
+
+} 
+
+impl User{
     pub fn CreateUser(user: User, client : Client) -> Result<(), Error> {
-        let user_collection = client.database("airport-crush").collection("Users");
+        let user_collection : Collection<User> = client.database("airport-crush").collection("Users");
         
+        Ok(())
+    }
+
+    pub fn FromForm(user: User) -> Result<(), Error> {
+
         Ok(())
     }
 

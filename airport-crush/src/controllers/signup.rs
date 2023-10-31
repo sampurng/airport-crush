@@ -1,5 +1,9 @@
-use core::fmt::Error;
-// use std::collections;
+use crate::collections::user::User;
+use rocket::form::Form;
+use rocket::serde::json::Json;
+use rocket::serde::json::Json as JsonValue;
+
+
 
 #[get("/world")]
 pub fn index(){
@@ -20,9 +24,9 @@ pub fn connections() -> &'static str {
 }
 
 #[post("/signup", format = "appication/json", data = "<user>")]
-pub fn signup(user: collections::user::User) -> Result<(), Error> {
-    println!("{}", user);
-    Ok(())
+pub fn signup(user: Form<User> ) -> Json<User> {
+    // println!("{}", user);
+    // Ok(())
 }
 
 

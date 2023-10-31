@@ -2,6 +2,7 @@
 extern crate rocket;
 mod connection;
 mod controllers;
+mod collections;
 
 #[launch]
 fn rocket() -> _ {
