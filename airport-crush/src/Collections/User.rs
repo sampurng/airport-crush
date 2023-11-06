@@ -2,7 +2,7 @@ use mongodb::Client;
 use serde::{Serialize, Deserialize};
 use std::fmt::Error;
 use mongodb::Collection; 
-use rocket::serde::Form;
+// use rocket::serde::Form;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct User{
@@ -14,9 +14,9 @@ pub struct User{
     age : Option<u32>,
 }
 
-impl<'v> FromFormValue<'v> for User{
+// impl<'v> FromFormValue<'v> for User{
 
-} 
+// } 
 
 impl User{
     pub fn CreateUser(user: User, client : Client) -> Result<(), Error> {

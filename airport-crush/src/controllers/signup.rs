@@ -2,7 +2,7 @@ use crate::collections::user::User;
 use rocket::form::Form;
 use rocket::serde::json::Json;
 use rocket::serde::json::Json as JsonValue;
-
+use std::fmt::Error;
 
 
 #[get("/world")]
@@ -24,9 +24,9 @@ pub fn connections() -> &'static str {
 }
 
 #[post("/signup", format = "appication/json", data = "<user>")]
-pub fn signup(user: Form<User> ) -> Json<User> {
-    // println!("{}", user);
-    // Ok(())
+pub fn signup(user: Json<User> ) -> &'static str {
+    println!("{}", serde_json);
+    "abs"
 }
 
 
