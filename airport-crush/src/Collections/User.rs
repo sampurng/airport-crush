@@ -5,6 +5,7 @@ use mongodb::Collection;
 // use rocket::serde::Form;
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
 pub struct User{
     email: String, 
     password: String, 

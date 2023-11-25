@@ -3,6 +3,7 @@ use rocket::form::Form;
 use rocket::serde::json::Json;
 use rocket::serde::json::Json as JsonValue;
 use std::fmt::Error;
+use serde_json;
 
 
 #[get("/world")]
@@ -23,10 +24,12 @@ pub fn connections() -> &'static str {
     "hehe"
 }
 
-#[post("/signup", format = "appication/json", data = "<user>")]
-pub fn signup(user: Json<User> ) -> &'static str {
-    println!("{}", serde_json);
-    "abs"
+#[post("/lol", format = "json", data = "<user>")]
+pub fn lol(user: Json<User> ) -> String {
+    // println!("{}", serde_json::to_string_pretty);
+    format!("{:?}", user);
+    serde_json::to_string(&user)?
+    // "abs"
 }
 
 
