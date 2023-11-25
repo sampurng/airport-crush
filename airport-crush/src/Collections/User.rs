@@ -12,7 +12,7 @@ pub struct User{
     user_name: Option<String>,
     first_name: Option<String>,
     last_name: Option<String>,
-    age : Option<u32>,
+    age: Option<u32>,
 }
 
 // impl<'v> FromFormValue<'v> for User{
