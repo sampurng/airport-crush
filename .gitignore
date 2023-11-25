@@ -1,2 +1,3 @@
 .DS_Store
-airport-crush/.gitignore
+/target
+Cargo.lock
