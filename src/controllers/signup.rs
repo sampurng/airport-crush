@@ -1,9 +1,6 @@
 use crate::collections::user::User;
-use rocket::form::Form;
 use rocket::serde::json::Json;
-use rocket::serde::json::Json as JsonValue;
 use serde_json;
-use std::fmt::Error;
 
 #[get("/world")]
 pub fn index() {
@@ -23,11 +20,11 @@ pub fn connections() -> &'static str {
     "hehe"
 }
 
-#[post("/lol", format = "json", data = "<user>")]
+#[post("/signup", format = "json", data = "<user>")]
 pub fn lol(user: Json<User>) -> String {
     // println!("{}", serde_json::to_string_pretty);
     format!("{:?}", user);
     let user: User = user.into_inner();
     serde_json::to_string(&user).unwrap()
-    // "abs"
+
 }
