@@ -1,7 +1,5 @@
-use std::ptr::null;
 
-use rocket::http::Method;
-use rocket_cors::{AllowedOrigins, AllowedHeaders};
+use rocket_cors::{CorsOptions};
 
 #[macro_use] 
 extern crate rocket;
@@ -9,18 +7,29 @@ mod connection;
 mod controllers;
 mod collections;
 
+
 #[launch]
-fn rocket() -> _ {
-    let t = connection::connect_to_mongo();
-    let allowed_origins = AllowedOrigins::some_exact(&["http://localhost:19006/"]);
+async fn rocket()-> _ {
+    // let allowed_origins = AllowedOrigins::some_exact(&["https://localhost:19006/"]);
+    // let allowed_origins: rocket_cors::AllOrSome<rocket_cors::Origins> = AllowedOrigins::all();
     
-    let cors = rocket_cors::CorsOptions {
-        allowed_origins,
-        allowed_methods: vec![Method::Post].into_iter().map(From::from).collect(),
-        allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "Content-type", "Access-Control-Allow-Origin"]),
-        allow_credentials: true,
-        ..Default::default()
-    }.to_cors().unwrap();
+    // let cors = rocket_cors::CorsOptions {
+    //     allowed_origins,
+    //     allowed_methods: vec![Method::Post].into_iter().map(From::from).collect(),
+    //     allowed_headers: AllowedHeaders::some(&["Authorization", "Accept", "content-type", "Access-Control-Allow-Origin", "X-Forwarded-For", "X-Forwarded-Proto", "Ngrok-Trace-Id"]),
+    //     allow_credentials: true,
+    //     ..Default::default()
+    // }.to_cors().unwrap();
+
+    let cors = CorsOptions::default().to_cors().unwrap();
+
+    // let config = rocket::Config {
+    //     address: "0.0.0.0".parse().unwrap(),
+    //     ..rocket::Config::default()
+    // };
+
     rocket::build()
-        .mount("/api", routes![controllers::signup::index, controllers::signup::connections, controllers::signup::lol]).attach(cors)
+        .mount("/api", routes![controllers::signup::signup])
+        .manage(connection::DbConn::new().await)
+        .attach(cors)
 }

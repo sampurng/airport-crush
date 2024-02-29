@@ -1,7 +1,10 @@
 use mongodb::{Client, results::InsertOneResult};
+use rocket::State;
 use serde::{Serialize, Deserialize};
 use std::fmt::Error;
-use mongodb::Collection; 
+use mongodb::Collection;
+
+use crate::connection::DbConn; 
 // use rocket::serde::Form;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -17,13 +20,12 @@ pub struct User{
 }
 
 impl User{
-    pub async fn CreateUser(user: User, client : Client) -> Result<InsertOneResult, mongodb::error::Error> {
-        let user_collection : Collection<User> = client.database("airport-crush").collection("Users");
-
-        user_collection.insert_one(user, None).await
+    pub async fn create_user(&self, client : &State<DbConn>) -> Result<InsertOneResult, mongodb::error::Error> {
+        let user_collection : &Collection<User> = &client.database.collection("test");
+        user_collection.insert_one(self, None).await
     }
 
-    pub fn FromForm(user: User) -> Result<(), Error> {
+    pub fn from_form(user: User) -> Result<(), Error> {
         
         Ok(())
     }

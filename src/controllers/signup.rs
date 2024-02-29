@@ -1,30 +1,33 @@
-use crate::collections::user::User;
-use rocket::serde::json::Json;
-use serde_json;
+use crate::{collections::user::User, connection::DbConn};
+use rocket::{http::Status, response::{status}, serde::json::Json, State};
+use serde::{Serialize, Deserialize};
 
-#[get("/world")]
-pub fn index() {
-    // let _dbs = connection::connect_to_mongo();
-    // match dbs {
-    //     Ok(res) => print!("{}", match res.get(0){
-    //         Some(str) => str,
-    //         _ => ""n
-    //     }),
-    //     Err(e) => print!("{}", e)
-    // }
-    ()
-}
-
-#[get("/databaseConnections")]
-pub fn connections() -> &'static str {
-    "hehe"
+#[derive(Debug, Serialize, Deserialize)]
+pub struct signup_response{
+    id : String,
 }
 
 #[post("/signup", format = "json", data = "<user>")]
-pub fn lol(user: Json<User>) -> String {
-    // println!("{}", serde_json::to_string_pretty);
+pub async fn signup(user: Json<User>, db_connection : &State<DbConn> ) -> status::Custom<Json<signup_response>> {
     format!("{:?}", user);
     let user: User = user.into_inner();
-    serde_json::to_string(&user).unwrap()
-
+    
+    match user.create_user(db_connection).await{
+        Ok(res) => {
+            let response: signup_response = signup_response{
+                id : res.inserted_id.to_string(),
+            };
+            status::Custom(Status::Accepted, Json(response))
+        }, 
+        Err(e) => {
+            let response = signup_response{
+                id : e.kind.to_string()
+            };
+            status::Custom(Status::ExpectationFailed, Json(response))}
+    }
 }
+
+// #[post("/authenticate", format="json", data="<claim>")]
+// pub fn authenticate(claim : Claims){
+
+// }
