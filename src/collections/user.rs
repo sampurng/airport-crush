@@ -1,7 +1,6 @@
-use mongodb::{Client, results::InsertOneResult};
+use mongodb::{bson::{self, bson, doc, to_bson}, results::{InsertOneResult, UpdateResult}, Client};
 use rocket::State;
 use serde::{Serialize, Deserialize};
-use std::fmt::Error;
 use mongodb::Collection;
 
 use crate::connection::DbConn; 
@@ -10,7 +9,7 @@ use crate::connection::DbConn;
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct User{
-    email: String, 
+    pub email: String, 
     password: String, 
     user_name: Option<String>,
     first_name: Option<String>,
@@ -25,9 +24,12 @@ impl User{
         user_collection.insert_one(self, None).await
     }
 
-    pub fn from_form(user: User) -> Result<(), Error> {
-        
-        Ok(())
+    pub async fn from_form(&self, db_connection: &State<DbConn>) -> Result<UpdateResult, mongodb::error::Error> {
+        let user_collection: &Collection<User> = &db_connection.database.collection("test");
+        let filter = doc! {"email": &self.email};
+        let user_bson = mongodb::bson::to_bson(self).unwrap();
+        let update = doc! {"$set" : user_bson};
+        user_collection.update_one(filter, update, None).await
     }
 
 }

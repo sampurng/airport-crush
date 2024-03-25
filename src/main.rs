@@ -1,4 +1,5 @@
 
+use collections::claims::{self, Claims};
 use rocket_cors::{CorsOptions};
 
 #[macro_use] 
@@ -28,8 +29,8 @@ async fn rocket()-> _ {
     //     ..rocket::Config::default()
     // };
 
-    rocket::build()
-        .mount("/api", routes![controllers::signup::signup])
+    rocket::build().attach(claims::JWT)
+        .mount("/api", routes![controllers::signup::signup, controllers::signup::save_details, controllers::helper::jwt_error])
         .manage(connection::DbConn::new().await)
         .attach(cors)
 }
